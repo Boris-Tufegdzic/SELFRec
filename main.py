@@ -1,6 +1,7 @@
 from SELFRec import SELFRec
 from util.conf import ModelConf
 import time
+import argparse
 
 def print_models(title, models):
     print(f"{'=' * 80}\n{title}\n{'-' * 80}")
@@ -19,12 +20,24 @@ if __name__ == '__main__':
     print('   SELFRec: A library for self-supervised recommendation.   ')
     print_models("Available Models", models)
 
-    model = input('Please enter the model you want to run:')
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(description='Run a specified model using SELFRec.')
+    parser.add_argument(
+        '--model', 
+        type=str, 
+        required=True, 
+        help='The name of the model to run (e.g., XSimGCL, SASRec, etc.).'
+    )
+    args = parser.parse_args()
+
+    # Check if the specified model exists
+    model = args.model
 
     s = time.time()
     all_models = sum(models.values(), [])
     if model in all_models:
-        conf = ModelConf(f'./conf/{model}.yaml')
+        kaggle_base_dir = "/kaggle/working/SELFREC/"
+        conf = ModelConf(kaggle_base_dir + f'conf/{model}.yaml')
         rec = SELFRec(conf)
         rec.execute()
         e = time.time()
