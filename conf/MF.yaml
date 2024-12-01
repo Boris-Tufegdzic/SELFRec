@@ -1,6 +1,6 @@
-training.set: ./dataset/yelp2018/train.txt
+training.set: /kaggle/input/fullyelp1/yelp/train.txt
 
-test.set: ./dataset/yelp2018/test.txt
+test.set: /kaggle/input/fullyelp1/yelp/test.txt
 
 model:
   name: MF
@@ -14,4 +14,4 @@ batch.size: 2048
 learning.rate: 0.001
 reg.lambda: 0.0001
 
-output: ./results/
+output: /kaggle/working/SELFREC/results/
