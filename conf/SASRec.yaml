@@ -1,6 +1,6 @@
-training.set: /kaggle/input/fullyelpdata4/seq-data/train.txt
+training.set: /kaggle/input/fullyelpdata5/seq-data/train.txt
 
-test.set: /kaggle/input/fullyelpdata4/seq-data/test.txt
+test.set: /kaggle/input/fullyelpdata5/seq-data/test.txt
 
 model:
   name: SASRec
