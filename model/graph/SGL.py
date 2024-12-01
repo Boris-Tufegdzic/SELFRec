@@ -42,8 +42,8 @@ class SGL(GraphRecommender):
                     print('training:', epoch + 1, 'batch', n, 'rec_loss:', rec_loss.item(), 'cl_loss', cl_loss.item())
             with torch.no_grad():
                 self.user_emb, self.item_emb = self.model()
-            if epoch>=5:
-                self.fast_evaluation(epoch)
+            # if epoch>=5:
+            self.fast_evaluation(epoch)
         self.user_emb, self.item_emb = self.best_user_emb, self.best_item_emb
 
     def save(self):
