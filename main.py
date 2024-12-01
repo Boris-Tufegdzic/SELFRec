@@ -36,7 +36,7 @@ if __name__ == '__main__':
     s = time.time()
     all_models = sum(models.values(), [])
     if model in all_models:
-        kaggle_base_dir = "/kaggle/working/SELFREC/"
+        kaggle_base_dir = "/kaggle/working/SELFRec/"
         conf = ModelConf(kaggle_base_dir + f'conf/{model}.yaml')
         rec = SELFRec(conf)
         rec.execute()
