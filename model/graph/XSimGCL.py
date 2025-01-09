@@ -5,6 +5,8 @@ from base.graph_recommender import GraphRecommender
 from util.sampler import next_batch_pairwise
 from base.torch_interface import TorchGraphInterface
 from util.loss_torch import bpr_loss, l2_reg_loss, InfoNCE
+import faiss
+import numpy as np
 
 # Paper: XSimGCL - Towards Extremely Simple Graph Contrastive Learning for Recommendation
 
@@ -41,6 +43,24 @@ class XSimGCL(GraphRecommender):
                 self.user_emb, self.item_emb = self.model()
             self.fast_evaluation(epoch)
         self.user_emb, self.item_emb = self.best_user_emb, self.best_item_emb
+
+        # Get the list of item IDs in the order of self.best_item_emb
+        item_ids = np.array([self.data.id2item[i] for i in range(len(self.best_item_emb))], dtype=np.int64)
+
+        # Convert embeddings to NumPy array in float32
+        item_embeddings = self.best_item_emb.detach().cpu().numpy().astype('float32')
+
+        # Get the dimension of the embeddings
+        dim = item_embeddings.shape[1]
+
+        # Create a FAISS index with IndexIDMap
+        index = faiss.IndexIDMap(faiss.IndexFlatL2(dim))
+
+        # Add the embeddings with their item IDs
+        index.add_with_ids(item_embeddings, item_ids)
+
+        # Save the index to disk
+        faiss.write_index(index, '/kaggle/working/SELFRec/item_embeddings.index')
 
     def cal_cl_loss(self, idx, user_view1,user_view2,item_view1,item_view2):
         u_idx = torch.unique(torch.Tensor(idx[0]).type(torch.long)).cuda()
